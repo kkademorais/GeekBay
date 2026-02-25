@@ -3,6 +3,7 @@ package ascii.ecommerce.demo.domain.inventario;
 import jakarta.persistence.*;
 
 @Entity(name = "inventario")
+@Table(name = "inventario")
 public class Inventario {
 
     @Id

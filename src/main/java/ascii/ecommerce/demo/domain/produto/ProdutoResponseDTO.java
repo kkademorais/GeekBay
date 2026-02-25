@@ -8,8 +8,8 @@ public record ProdutoResponseDTO(
         String descricao,
         Double preco,
         String imagem,
-        int categoria_id,
-        boolean ativo
+        Integer categoria_id,
+        Boolean ativo
 ){
     public ProdutoResponseDTO(Produto produto){
         this(produto.getId(), produto.getNome(), produto.getDescricao(), produto.getPreco(), produto.getImagem(), produto.getCategoria_id(), produto.isAtivo());

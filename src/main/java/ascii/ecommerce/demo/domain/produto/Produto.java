@@ -3,6 +3,7 @@ package ascii.ecommerce.demo.domain.produto;
 import jakarta.persistence.*;
 
 @Entity(name = "produto")
+@Table(name = "produto")
 public class Produto {
 
     @Id
@@ -16,10 +17,10 @@ public class Produto {
     private Double preco;
     @Column(name = "imagem")
     private String imagem;
-    @Column(name = "categoria_id")
-    private int categoria_id;
+    @Column(name = "categoria_id", nullable = false)
+    private Integer categoria_id;
     @Column(name = "ativo")
-    private boolean ativo;
+    private Boolean ativo;
 
     public Produto(){}
 
@@ -40,6 +41,15 @@ public class Produto {
         this.imagem = produtoRequestDTO.imagem();
         this.categoria_id = produtoRequestDTO.categoria_id();
         this.ativo = produtoRequestDTO.ativo();
+    }
+
+    public Produto(ProdutoPatchRequestDTO produtoPatchRequestDTO){
+        this.nome = produtoPatchRequestDTO.nome();
+        this.descricao = produtoPatchRequestDTO.descricao();
+        this.preco = produtoPatchRequestDTO.preco();
+        this.imagem = produtoPatchRequestDTO.imagem();
+        this.categoria_id = produtoPatchRequestDTO.categoria_id();
+        this.ativo = produtoPatchRequestDTO.ativo();
     }
 
 

@@ -1,16 +1,11 @@
 package ascii.ecommerce.demo.domain.produto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
-public record ProdutoRequestDTO(
-        @NotBlank
+public record ProdutoPatchRequestDTO(
         String nome,
         String descricao,
-        @NotNull
         Double preco,
         String imagem,
-        @NotNull
         Integer categoria_id,
         Boolean ativo
 ) {}

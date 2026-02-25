@@ -1,5 +1,6 @@
 package ascii.ecommerce.demo.controllers;
 
+import ascii.ecommerce.demo.domain.produto.ProdutoPatchRequestDTO;
 import ascii.ecommerce.demo.domain.produto.ProdutoRequestDTO;
 import ascii.ecommerce.demo.domain.produto.ProdutoResponseDTO;
 import ascii.ecommerce.demo.services.ProdutoService;
@@ -31,13 +32,13 @@ public class ProdutoController {
         return ResponseEntity.ok(this.produtoService.getProdutoById(id));
     }
 
-    @GetMapping("/produto/{nome}")
+    @GetMapping("/produto/nome/{nome}")
     public ResponseEntity<ProdutoResponseDTO> getProdutoByNome(@PathVariable String nome){
         return ResponseEntity.ok(this.produtoService.getProdutoByNome(nome));
     }
 
-    @GetMapping("/produto/{categoria_id}")
-    public ResponseEntity<List<ProdutoResponseDTO>> getProdutoListByCategoria(@PathVariable int categoria_id){
+    @GetMapping("/produto/categoria/{categoria_id}")
+    public ResponseEntity<List<ProdutoResponseDTO>> getProdutoListByCategoria(@PathVariable Integer categoria_id){
         return ResponseEntity.ok(this.produtoService.getProdutoListByCategoria(categoria_id));
     }
 
@@ -57,7 +58,18 @@ public class ProdutoController {
         this.produtoService.updateProdutoById(id, produtoRequestDTO);
         return ResponseEntity.ok().build();
     }
-    //Falta fazer updateByNome
+
+    @PutMapping("/produto/nome/{nome}")
+    public ResponseEntity updateProdutoByNome(@PathVariable String nome, @RequestBody ProdutoRequestDTO produtoRequestDTO){
+        this.produtoService.updateProdutoByNome(nome, produtoRequestDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/produto/{id}")
+    public ResponseEntity updatePartialProdutoById(@PathVariable int id, @RequestBody ProdutoPatchRequestDTO produtoPatchRequestDTO){
+        this.produtoService.updatePartialProdutoById(id, produtoPatchRequestDTO);
+        return ResponseEntity.ok().build();
+    }
 
 
         // DELETE
