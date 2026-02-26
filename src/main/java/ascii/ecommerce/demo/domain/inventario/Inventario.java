@@ -7,7 +7,8 @@ import jakarta.persistence.*;
 public class Inventario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "inventario_seq", sequenceName = "inventario_seq", allocationSize = 1)
     private int id;
     @Column(name = "quantidade")
     private int quantidade;

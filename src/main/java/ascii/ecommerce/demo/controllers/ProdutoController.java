@@ -4,6 +4,7 @@ import ascii.ecommerce.demo.domain.produto.ProdutoPatchRequestDTO;
 import ascii.ecommerce.demo.domain.produto.ProdutoRequestDTO;
 import ascii.ecommerce.demo.domain.produto.ProdutoResponseDTO;
 import ascii.ecommerce.demo.services.ProdutoService;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,11 @@ public class ProdutoController {
     public ProdutoController(ProdutoService produtoService){
         this.produtoService = produtoService;
     }
+
+        // Criar BAD REQUEST BODY nos GET que retornam entidades
+        // Consertar updateProdutoById -> sempre retorna 200 mesmo com ID inválido
+        // Consertar updateProdutoByNome -> sempre retorna 200 mesmo com ID inválido
+        // Consertar deleteProdutoById -> sempre retorna 200 mesmo com ID inválido
 
 
         // GET
@@ -55,27 +61,36 @@ public class ProdutoController {
         // PUT
     @PutMapping("/produto/{id}")
     public ResponseEntity updateProdutoById(@PathVariable int id, @RequestBody ProdutoRequestDTO produtoRequestDTO){
-        this.produtoService.updateProdutoById(id, produtoRequestDTO);
-        return ResponseEntity.ok().build();
+        try{
+            this.produtoService.updateProdutoById(id, produtoRequestDTO);
+            return ResponseEntity.ok().build();
+        }
+        catch (RuntimeException idInvalido){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/produto/nome/{nome}")
     public ResponseEntity updateProdutoByNome(@PathVariable String nome, @RequestBody ProdutoRequestDTO produtoRequestDTO){
-        this.produtoService.updateProdutoByNome(nome, produtoRequestDTO);
-        return ResponseEntity.ok().build();
-    }
-
-    @PatchMapping("/produto/{id}")
-    public ResponseEntity updatePartialProdutoById(@PathVariable int id, @RequestBody ProdutoPatchRequestDTO produtoPatchRequestDTO){
-        this.produtoService.updatePartialProdutoById(id, produtoPatchRequestDTO);
-        return ResponseEntity.ok().build();
+        try{
+            this.produtoService.updateProdutoByNome(nome, produtoRequestDTO);
+            return ResponseEntity.ok().build();
+        }
+        catch (RuntimeException idInvalido){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 
         // DELETE
     @DeleteMapping("/produto/{id}")
     public ResponseEntity deleteProdutoById(@PathVariable int id){
-        this.produtoService.deleteProdutoById(id);
-        return ResponseEntity.ok().build();
+        try{
+            this.produtoService.deleteProdutoById(id);
+            return ResponseEntity.ok().build();
+        }
+        catch (RuntimeException idInvalido){
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

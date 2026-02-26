@@ -6,9 +6,14 @@ import jakarta.persistence.*;
 @Table(name = "produto")
 public class Produto {
 
+        // Consertar geração do ID
+
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+        // Estudar SEQUENCE X IDENTITY
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "produto_seq")
+    @SequenceGenerator(name = "produto_seq", sequenceName = "produto_seq", allocationSize = 1)
+    private Integer id;
     @Column(name = "nome", nullable = false)
     private String nome;
     @Column(name = "descricao")
@@ -24,7 +29,7 @@ public class Produto {
 
     public Produto(){}
 
-    public Produto(int id, String nome, String descricao, Double preco, String imagem, int categoria_id, boolean ativo){
+    public Produto(int id, String nome, String descricao, Double preco, String imagem, Integer categoria_id, Boolean ativo){
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -68,10 +73,10 @@ public class Produto {
     public String getImagem() {return imagem;}
     public void setImagem(String imagem) {this.imagem = imagem;}
 
-    public int getCategoria_id() {return categoria_id;}
-    public void setCategoria_id(int categoria_id) {this.categoria_id = categoria_id;}
+    public Integer getCategoria_id() {return categoria_id;}
+    public void setCategoria_id(Integer categoria_id) {this.categoria_id = categoria_id;}
 
-    public boolean isAtivo() {return ativo;}
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public Boolean isAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 
 }
