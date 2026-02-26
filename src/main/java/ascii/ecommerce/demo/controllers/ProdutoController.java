@@ -1,17 +1,15 @@
 package ascii.ecommerce.demo.controllers;
 
-import ascii.ecommerce.demo.domain.produto.ProdutoPatchRequestDTO;
 import ascii.ecommerce.demo.domain.produto.ProdutoRequestDTO;
 import ascii.ecommerce.demo.domain.produto.ProdutoResponseDTO;
 import ascii.ecommerce.demo.services.ProdutoService;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api") // Consertar aqui -> Colocar /produto e retirar dos endpoints
 public class ProdutoController {
 
     private final ProdutoService produtoService;
@@ -93,4 +91,7 @@ public class ProdutoController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    // Adicionar deleteProdutoByNome
+
 }

@@ -14,7 +14,7 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "produto_seq")
     @SequenceGenerator(name = "produto_seq", sequenceName = "produto_seq", allocationSize = 1)
     private Integer id;
-    @Column(name = "nome", nullable = false)
+    @Column(name = "nome", nullable = false, unique = true) // Coloquei unique pra filtrar por nome corretamente
     private String nome;
     @Column(name = "descricao")
     private String descricao;
@@ -23,7 +23,7 @@ public class Produto {
     @Column(name = "imagem")
     private String imagem;
     @Column(name = "categoria_id", nullable = false)
-    private Integer categoria_id;
+    private Integer categoria_id;                           // Adicionar esse como FK (Foreign Key)
     @Column(name = "ativo")
     private Boolean ativo;
 
@@ -47,16 +47,6 @@ public class Produto {
         this.categoria_id = produtoRequestDTO.categoria_id();
         this.ativo = produtoRequestDTO.ativo();
     }
-
-    public Produto(ProdutoPatchRequestDTO produtoPatchRequestDTO){
-        this.nome = produtoPatchRequestDTO.nome();
-        this.descricao = produtoPatchRequestDTO.descricao();
-        this.preco = produtoPatchRequestDTO.preco();
-        this.imagem = produtoPatchRequestDTO.imagem();
-        this.categoria_id = produtoPatchRequestDTO.categoria_id();
-        this.ativo = produtoPatchRequestDTO.ativo();
-    }
-
 
     public int getId() {return id;}
     public void setId(int id) {this.id = id;}
