@@ -7,6 +7,7 @@ import ascii.ecommerce.demo.repositories.ProdutoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProdutoService {
@@ -39,7 +40,10 @@ public class ProdutoService {
     }
 
     public ProdutoResponseDTO getProdutoByNome(String nome){
-        ProdutoResponseDTO produtoBuscado = this.produtoRepository
+        Optional<Produto> produtoBuscado = filtraProdutoExistentePorNome(nome);
+        if(produtoBuscado.isPresent()) return new ProdutoResponseDTO(produtoBuscado.get());
+        else throw new RuntimeException("Nome inválido ou produto inexistente");
+        /*ProdutoResponseDTO produtoBuscado = this.produtoRepository
                 .findAll()
                 .stream()
                 .filter(produto -> produto.getNome().equalsIgnoreCase(nome))
@@ -49,7 +53,7 @@ public class ProdutoService {
         if(this.produtoRepository.existsById(produtoBuscado.id())){
             return produtoBuscado;
         }
-        throw new RuntimeException("Nome inválido ou produto inexistente"); // Não funciona -> Verificar
+        throw new RuntimeException("Nome inválido ou produto inexistente"); // Não funciona -> Verificar */
     }
 
     public List<ProdutoResponseDTO> getProdutoListByCategoria(int categoria_id){
@@ -101,7 +105,7 @@ public class ProdutoService {
             if(this.produtoRepository.findByNome(nome) != null){
                 Produto produtoUpdate = new Produto(produtoRequestDTO);
 
-                Produto produtoASerAtualizado = this.produtoRepository.findAll().stream().filter(produto -> produto.getNome().equalsIgnoreCase(nome)).findFirst().get();
+                Produto produtoASerAtualizado = filtraProdutoExistentePorNome(nome).get();
 
                 produtoUpdate.setId(produtoASerAtualizado.getId());
 
@@ -130,4 +134,39 @@ public class ProdutoService {
         }
         catch (RuntimeException idInvalido){}
     }
+
+    public void deleteProdutoByNome(String nome){
+
+        Optional<Produto> produtoDelete = filtraProdutoExistentePorNome(nome);
+        if(produtoDelete.isPresent()){
+            this.produtoRepository.delete(produtoDelete.get());
+        }
+        else throw new RuntimeException("Nome inválido ou produto inexistente");
+
+    }
+
+
+    public Optional<Produto> filtraProdutoExistentePorNome(String nome){
+        return this.produtoRepository.findAll().stream()
+                .filter(produto -> produto.getNome()
+                        .replace('á', 'a')
+                        .replace('ã','a')
+                        .replace('ô','o')
+                        .replace('ê', 'e')
+                        .replace('ç', 'c')
+                        .replace('ó','o')
+                        .replace('í','i')
+                        .equalsIgnoreCase(nome
+                                .replace('á', 'a')
+                                .replace('ã','a')
+                                .replace('ô','o')
+                                .replace('ê', 'e')
+                                .replace('ç', 'c')
+                                .replace('ó','o')
+                                .replace('í','i')
+                        )
+                )
+                .findFirst();
+    }
+
 }
