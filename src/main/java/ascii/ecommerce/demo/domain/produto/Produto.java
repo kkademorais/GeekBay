@@ -1,6 +1,10 @@
 package ascii.ecommerce.demo.domain.produto;
 
+import ascii.ecommerce.demo.domain.categoria.Categoria;
+import ascii.ecommerce.demo.domain.categoria.CategoriaResponseDTO;
 import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity(name = "produto")
 @Table(name = "produto")
@@ -22,21 +26,27 @@ public class Produto {
     private Double preco;
     @Column(name = "imagem")
     private String imagem;
-    @Column(name = "categoria_id", nullable = false)
-    private Integer categoria_id;                           // Adicionar esse como FK (Foreign Key)
+    //@Column(name = "categoria_id", nullable = false)
+    //private Integer categoria_id;                           // Adicionar esse como FK (Foreign Key)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
     @Column(name = "ativo")
     private Boolean ativo;
 
     public Produto(){}
 
-    public Produto(int id, String nome, String descricao, Double preco, String imagem, Integer categoria_id, Boolean ativo){
+    public Produto(int id, String nome, String descricao, Double preco, String imagem, Boolean ativo, Categoria categoria){
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
         this.imagem = imagem;
-        this.categoria_id = categoria_id;
+        //this.categoria_id = categoria_id;
         this.ativo = ativo;
+        this.categoria = categoria;
     }
 
     public Produto(ProdutoRequestDTO produtoRequestDTO){
@@ -44,7 +54,7 @@ public class Produto {
         this.descricao = produtoRequestDTO.descricao();
         this.preco = produtoRequestDTO.preco();
         this.imagem = produtoRequestDTO.imagem();
-        this.categoria_id = produtoRequestDTO.categoria_id();
+        //this.categoria_id = produtoRequestDTO.categoria_id();
         this.ativo = produtoRequestDTO.ativo();
     }
 
@@ -63,10 +73,42 @@ public class Produto {
     public String getImagem() {return imagem;}
     public void setImagem(String imagem) {this.imagem = imagem;}
 
-    public Integer getCategoria_id() {return categoria_id;}
-    public void setCategoria_id(Integer categoria_id) {this.categoria_id = categoria_id;}
+   //public Integer getCategoria_id() {return categoria_id;}
+    //public void setCategoria_id(Integer categoria_id) {this.categoria_id = categoria_id;}
 
     public Boolean isAtivo() {return ativo;}
     public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 
+    public Categoria getCategoria() {return categoria;}
+    public void setCategoria(Categoria categoria) {this.categoria = categoria;}
+
+    public CategoriaResponseDTO converteParaDto(Categoria categoria){
+        return new CategoriaResponseDTO(categoria);
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Produto produto)) return false;
+        return Objects.equals(id, produto.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", preco=" + preco +
+                ", imagem='" + imagem + '\'' +
+                ", categoria=" + categoria +
+                ", ativo=" + ativo +
+                '}';
+    }
 }

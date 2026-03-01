@@ -1,9 +1,12 @@
 package ascii.ecommerce.demo.services;
 
+import ascii.ecommerce.demo.domain.categoria.Categoria;
+import ascii.ecommerce.demo.domain.categoria.CategoriaResponseDTO;
 import ascii.ecommerce.demo.domain.produto.Produto;
 import ascii.ecommerce.demo.domain.produto.ProdutoRequestDTO;
 import ascii.ecommerce.demo.domain.produto.ProdutoResponseDTO;
 import ascii.ecommerce.demo.repositories.ProdutoRepository;
+import ascii.ecommerce.demo.repositories.CategoriaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +16,11 @@ import java.util.Optional;
 public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
+    private final CategoriaRepository categoriaRepository;
 
-    public ProdutoService(ProdutoRepository produtoRepository){
+    public ProdutoService(ProdutoRepository produtoRepository, CategoriaRepository categoriaRepository){
         this.produtoRepository = produtoRepository;
+        this.categoriaRepository = categoriaRepository;
     }
 
 
@@ -57,12 +62,13 @@ public class ProdutoService {
     }
 
     public List<ProdutoResponseDTO> getProdutoListByCategoria(int categoria_id){
-        return this.produtoRepository
+        return this.produtoRepository.findByCategoriaId(categoria_id).stream().map(produto -> new ProdutoResponseDTO(produto)).toList();
+        /*return this.produtoRepository
                 .findAll()
                 .stream()
-                .filter(produto -> produto.getCategoria_id() == categoria_id)
+                //.filter(produto -> produto.getCategoria_id() == categoria_id)
                 .map(produto -> new ProdutoResponseDTO(produto))
-                .toList();
+                .toList();*/
     }
 
 
@@ -70,7 +76,17 @@ public class ProdutoService {
 
             // Colocar ativo=true por default
     public void addNewProduto(ProdutoRequestDTO produtoRequestDTO){
-        this.produtoRepository.save(new Produto(produtoRequestDTO));
+        Categoria categoriaAdd = this.categoriaRepository.findById(produtoRequestDTO.categoria_id()).get();
+        Produto produtoAdd = new Produto();
+        produtoAdd.setNome(produtoRequestDTO.nome());
+        produtoAdd.setDescricao(produtoRequestDTO.descricao());
+        produtoAdd.setPreco(produtoRequestDTO.preco());
+        produtoAdd.setAtivo(produtoRequestDTO.ativo());
+        produtoAdd.setImagem(produtoRequestDTO.imagem());
+        produtoAdd.setCategoria(categoriaAdd);
+        this.produtoRepository.save(produtoAdd);
+        //if(this.produtoRepository.findById(produtoRequestDTO.categoria_id()).isPresent()) this.produtoRepository.save(new Produto(produtoRequestDTO));
+        //else throw new RuntimeException("ID inválido ou categoria inexistente");
     }
 
 
@@ -88,7 +104,7 @@ public class ProdutoService {
                 if(produtoUpdate.getDescricao() == null) produtoUpdate.setDescricao(produtoASerAtualizado.getDescricao());
                 if(produtoUpdate.getPreco() == null) produtoUpdate.setPreco(produtoASerAtualizado.getPreco());
                 if(produtoUpdate.getImagem() == null) produtoUpdate.setImagem(produtoASerAtualizado.getImagem());
-                if(produtoUpdate.getCategoria_id() == null) produtoUpdate.setCategoria_id(produtoASerAtualizado.getCategoria_id());
+                //if(produtoUpdate.getCategoria_id() == null) produtoUpdate.setCategoria_id(produtoASerAtualizado.getCategoria_id());
                 if(produtoUpdate.isAtivo() == null) produtoUpdate.setAtivo(produtoASerAtualizado.isAtivo());
 
                 this.produtoRepository.save(produtoUpdate);
@@ -113,7 +129,7 @@ public class ProdutoService {
                 if(produtoUpdate.getDescricao() == null) produtoUpdate.setDescricao(produtoASerAtualizado.getDescricao());
                 if(produtoUpdate.getPreco() == null) produtoUpdate.setPreco(produtoASerAtualizado.getPreco());
                 if(produtoUpdate.getImagem() == null) produtoUpdate.setImagem(produtoASerAtualizado.getImagem());
-                if(produtoUpdate.getCategoria_id() == null) produtoUpdate.setCategoria_id(produtoASerAtualizado.getCategoria_id());
+                //if(produtoUpdate.getCategoria_id() == null) produtoUpdate.setCategoria_id(produtoASerAtualizado.getCategoria_id());
                 if(produtoUpdate.isAtivo() == null) produtoUpdate.setAtivo(produtoASerAtualizado.isAtivo());
 
                 this.produtoRepository.save(produtoUpdate);
@@ -168,5 +184,7 @@ public class ProdutoService {
                 )
                 .findFirst();
     }
+
+
 
 }

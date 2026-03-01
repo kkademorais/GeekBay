@@ -1,6 +1,10 @@
 package ascii.ecommerce.demo.domain.categoria;
 
+import ascii.ecommerce.demo.domain.produto.Produto;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "categoria")
 @Table(name = "categoria")
@@ -14,6 +18,13 @@ public class Categoria {
     private String nome;
     @Column(name = "descricao")
     private String descricao;
+
+    @OneToMany(
+            mappedBy = "categoria",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Produto> produtosRegistrados = new ArrayList<>();
 
     public Categoria(){}
 

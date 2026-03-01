@@ -1,6 +1,7 @@
 package ascii.ecommerce.demo.domain.produto;
 
-import jakarta.persistence.Column;
+import ascii.ecommerce.demo.domain.categoria.Categoria;
+import ascii.ecommerce.demo.domain.categoria.CategoriaResponseDTO;
 
 public record ProdutoResponseDTO(
         int id,
@@ -8,10 +9,11 @@ public record ProdutoResponseDTO(
         String descricao,
         Double preco,
         String imagem,
-        Integer categoria_id,
+        //Categoria categoria,
+        CategoriaResponseDTO categoriaResponseDTO,
         Boolean ativo
 ){
     public ProdutoResponseDTO(Produto produto){
-        this(produto.getId(), produto.getNome(), produto.getDescricao(), produto.getPreco(), produto.getImagem(), produto.getCategoria_id(), produto.isAtivo());
+        this(produto.getId(), produto.getNome(), produto.getDescricao(), produto.getPreco(), produto.getImagem(), produto.converteParaDto(produto.getCategoria()), produto.isAtivo());
     }
 }
