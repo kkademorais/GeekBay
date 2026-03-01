@@ -104,6 +104,7 @@ public class ProdutoService {
                 if(produtoUpdate.getDescricao() == null) produtoUpdate.setDescricao(produtoASerAtualizado.getDescricao());
                 if(produtoUpdate.getPreco() == null) produtoUpdate.setPreco(produtoASerAtualizado.getPreco());
                 if(produtoUpdate.getImagem() == null) produtoUpdate.setImagem(produtoASerAtualizado.getImagem());
+                if(produtoUpdate.getCategoria() == null) produtoUpdate.setCategoria(produtoASerAtualizado.getCategoria());
                 //if(produtoUpdate.getCategoria_id() == null) produtoUpdate.setCategoria_id(produtoASerAtualizado.getCategoria_id());
                 if(produtoUpdate.isAtivo() == null) produtoUpdate.setAtivo(produtoASerAtualizado.isAtivo());
 
@@ -118,7 +119,7 @@ public class ProdutoService {
 
     public void updateProdutoByNome(String nome, ProdutoRequestDTO produtoRequestDTO){
         try{
-            if(this.produtoRepository.findByNome(nome) != null){
+            if(filtraProdutoExistentePorNome(nome).isPresent()){
                 Produto produtoUpdate = new Produto(produtoRequestDTO);
 
                 Produto produtoASerAtualizado = filtraProdutoExistentePorNome(nome).get();
@@ -129,6 +130,7 @@ public class ProdutoService {
                 if(produtoUpdate.getDescricao() == null) produtoUpdate.setDescricao(produtoASerAtualizado.getDescricao());
                 if(produtoUpdate.getPreco() == null) produtoUpdate.setPreco(produtoASerAtualizado.getPreco());
                 if(produtoUpdate.getImagem() == null) produtoUpdate.setImagem(produtoASerAtualizado.getImagem());
+                if(produtoUpdate.getCategoria() == null) produtoUpdate.setCategoria(produtoASerAtualizado.getCategoria());
                 //if(produtoUpdate.getCategoria_id() == null) produtoUpdate.setCategoria_id(produtoASerAtualizado.getCategoria_id());
                 if(produtoUpdate.isAtivo() == null) produtoUpdate.setAtivo(produtoASerAtualizado.isAtivo());
 
@@ -144,11 +146,8 @@ public class ProdutoService {
         // DELETE
 
     public void deleteProdutoById(int id){
-        try{
             if(this.produtoRepository.existsById(id)) this.produtoRepository.deleteById(id);
             else throw new RuntimeException ("ID inválido ou produto inexistente");
-        }
-        catch (RuntimeException idInvalido){}
     }
 
     public void deleteProdutoByNome(String nome){

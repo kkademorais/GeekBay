@@ -47,4 +47,8 @@ public class Categoria {
 
     public String getDescricao() {return descricao;}
     public void setDescricao(String descricao) {this.descricao = descricao;}
+
+    public List<Produto> getProdutosRegistrados() {return produtosRegistrados;}
+    public void setProdutosRegistrados(List<Produto> produtosRegistrados) {this.produtosRegistrados = produtosRegistrados;}
+
 }
