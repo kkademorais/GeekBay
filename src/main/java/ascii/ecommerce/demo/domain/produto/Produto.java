@@ -2,6 +2,7 @@ package ascii.ecommerce.demo.domain.produto;
 
 import ascii.ecommerce.demo.domain.categoria.Categoria;
 import ascii.ecommerce.demo.domain.categoria.CategoriaResponseDTO;
+import ascii.ecommerce.demo.domain.estoque.Estoque;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -35,6 +36,11 @@ public class Produto {
 
     @Column(name = "ativo")
     private Boolean ativo;
+
+    @OneToOne(mappedBy = "produto",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private Estoque estoque;
 
     public Produto(){}
 

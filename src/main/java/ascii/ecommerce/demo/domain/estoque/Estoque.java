@@ -1,5 +1,7 @@
 package ascii.ecommerce.demo.domain.estoque;
 
+import ascii.ecommerce.demo.domain.produto.Produto;
+import ascii.ecommerce.demo.domain.produto.ProdutoResponseDTO;
 import jakarta.persistence.*;
 
 @Entity(name = "estoque")
@@ -12,17 +14,20 @@ public class Estoque {
     private Integer id;
     @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
-    @Column(name = "produtoId", nullable = false, unique = true)
-    private Integer produtoId;
+    //@Column(name = "produtoId", nullable = false, unique = true)
+    //private Integer produtoId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "produto_id")
+    private Produto produto;
 
     public Estoque(){}
-    public Estoque(Integer quantidade, Integer produtoId){
+    public Estoque(Integer quantidade, Produto produto){
         this.quantidade = quantidade;
-        this.produtoId = produtoId;
+        this.produto = produto;
     }
     public Estoque(EstoqueRequestDTO estoqueRequestDTO){
         this.quantidade = estoqueRequestDTO.quantidade();
-        this.produtoId = estoqueRequestDTO.produto_id();
     }
 
 
@@ -32,6 +37,11 @@ public class Estoque {
     public Integer getQuantidade() {return quantidade;}
     public void setQuantidade(Integer quantidade) {this.quantidade = quantidade;}
 
-    public Integer getProdutoId() {return produtoId;}
-    public void setProdutoId(Integer produtoId) {this.produtoId = produtoId;}
+    public Produto getProduto() {return produto;}
+    public void setProduto(Produto produto) {this.produto = produto;}
+
+    public ProdutoResponseDTO converteParaDto(Produto produto){
+        return new ProdutoResponseDTO(produto);
+    }
+
 }
