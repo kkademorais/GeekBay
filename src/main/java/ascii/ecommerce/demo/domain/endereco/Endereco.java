@@ -1,33 +1,40 @@
 package ascii.ecommerce.demo.domain.endereco;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
+@Entity(name = "endereco")
+@Table(name = "endereco")
 public class Endereco {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "endereco_seq")
+    @SequenceGenerator(name = "endereco_seq", sequenceName = "endereco_seq", initialValue = 1, allocationSize = 1)
+    private Integer id;
+    @Column(nullable = false)
     private String cep;
+
     private String state;
     private String city;
     private String neighborhood;
     private String street;
     private String service;
 
+    @Column(nullable = false)
+    private Integer usuarioId;
+
     public Endereco(){}
-    public Endereco(String cep, String state, String city, String neighborhood, String street, String service){
+    public Endereco(String cep, String state, String city, String neighborhood, String street, String service, Integer usuarioId){
         this.cep = cep;
         this.state = state;
         this.city = city;
         this.neighborhood = neighborhood;
         this.street = street;
         this.service = service;
+        this.usuarioId = usuarioId;
     }
-    public Endereco(EnderecoResponseDTO enderecoResponseDTO){
-        this.cep = enderecoResponseDTO.cep();
-        this.state = enderecoResponseDTO.state();
-        this.city = enderecoResponseDTO.city();
-        this.neighborhood = enderecoResponseDTO.neighborhood();
-        this.street = enderecoResponseDTO.street();
-        this.service = enderecoResponseDTO.service();
+    public Endereco(EnderecoRequestDTO enderecoRequestDTO){
+        this.cep = enderecoRequestDTO.cep();
+        this.usuarioId = enderecoRequestDTO.usuarioId();
     }
 
 
@@ -48,4 +55,11 @@ public class Endereco {
 
     public String getService() {return service;}
     public void setService(String service) {this.service = service;}
+
+    public Integer getId() {return id;}
+    public void setId(Integer id) {this.id = id;}
+
+    public Integer getUsuarioId() {return usuarioId;}
+    public void setUsuarioId(Integer usuarioId) {this.usuarioId = usuarioId;}
+
 }

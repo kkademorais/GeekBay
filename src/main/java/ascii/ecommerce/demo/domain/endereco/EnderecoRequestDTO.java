@@ -1,4 +1,12 @@
 package ascii.ecommerce.demo.domain.endereco;
 
-public record EnderecoRequestDTO() {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record EnderecoRequestDTO(
+        @NotBlank
+        String cep,
+        @NotNull
+        Integer usuarioId
+) {
 }

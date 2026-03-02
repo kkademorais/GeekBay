@@ -6,9 +6,10 @@ public record EnderecoResponseDTO(
     String city,
     String neighborhood,
     String street,
-    String service
+    String service,
+    Integer usuarioId
 ) {
     public EnderecoResponseDTO(Endereco endereco){
-        this(endereco.getCep(), endereco.getState(), endereco.getCity(), endereco.getNeighborhood(), endereco.getStreet(), endereco.getService());
+        this(endereco.getCep(), endereco.getState(), endereco.getCity(), endereco.getNeighborhood(), endereco.getStreet(), endereco.getService(), endereco.getUsuarioId());
     }
 }

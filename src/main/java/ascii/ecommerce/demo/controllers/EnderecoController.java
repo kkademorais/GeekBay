@@ -1,12 +1,10 @@
 package ascii.ecommerce.demo.controllers;
 
+import ascii.ecommerce.demo.domain.endereco.EnderecoRequestDTO;
 import ascii.ecommerce.demo.domain.endereco.EnderecoResponseDTO;
 import ascii.ecommerce.demo.services.EnderecoService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/endereco")
@@ -19,8 +17,20 @@ public class EnderecoController {
     }
 
     @GetMapping("/cep/{cep}")
-    public ResponseEntity<Object> getEnderecoByCep(@PathVariable String cep){
+    public ResponseEntity<EnderecoResponseDTO> getEnderecoByCep(@PathVariable String cep){
         return ResponseEntity.ok(this.enderecoService.getEnderecoByCep(cep));
     }
+
+    @GetMapping("/usuarioId/{usuarioId}")
+    public ResponseEntity<EnderecoResponseDTO> getEnderecoByUsuarioId(@PathVariable Integer usuarioId){
+        return ResponseEntity.ok(this.enderecoService.getEnderecoByUsuarioId(usuarioId));
+    }
+
+    @PostMapping()
+    public ResponseEntity addNewEnderecoByCep(@RequestBody EnderecoRequestDTO enderecoRequestDTO){
+        this.enderecoService.addNewEnderecoByCep(enderecoRequestDTO);
+        return ResponseEntity.ok().build();
+    }
+
 
 }
